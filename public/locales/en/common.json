@@ -1,0 +1,120 @@
+{
+  "title": "Welcome to the Hackathon",
+  "login": "Login",
+  "logout": "Logout",
+  
+  "sidebar": {
+    "appName": "SnowHacks",
+    "version": "Dashboard v1.0",
+    "mainMenu": "Main Menu",
+    "dashboard": "Dashboard",
+    "analytics": "Analytics",
+    "customers": "Customers",
+    "products": "Products",
+    "orders": "Orders",
+    "transactions": "Transactions",
+    "reports": "Reports",
+    "settings": "Settings",
+    "helpCenter": "Help Center",
+    "admin": "Admin"
+  },
+
+  "header": {
+    "search": "Search anything...",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "switchMode": "Switch to {{mode}} mode",
+    "light": "light",
+    "dark": "dark"
+  },
+
+  "profileMenu": {
+    "myProfile": "My Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+
+  "notifications": {
+    "title": "Notifications",
+    "newOrder": "New order received",
+    "paymentConfirmed": "Payment confirmed",
+    "newUser": "New user registered",
+    "serverUpdate": "Server update complete"
+  },
+
+  "dashboard": {
+    "welcome": "Welcome back, {{name}}! 👋",
+    "subtitle": "Here's what's happening with your business today.",
+    "totalRevenue": "Total Revenue",
+    "totalOrders": "Total Orders",
+    "totalCustomers": "Total Customers",
+    "totalProducts": "Total Products",
+    "vsLastMonth": "vs last month",
+    "revenueOverview": "Revenue Overview",
+    "monthlyRevenue": "Monthly revenue for 2024",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
+    "activeProjects": "Active Projects",
+    "viewAll": "View All"
+  },
+
+  "projects": {
+    "websiteRedesign": "Website Redesign",
+    "mobileApp": "Mobile App Development",
+    "marketing": "Marketing Campaign",
+    "customerPortal": "Customer Portal"
+  },
+
+  "orders": {
+    "recentOrders": "Recent Orders",
+    "latestPurchases": "Latest customer purchases",
+    "orderId": "Order ID",
+    "customer": "Customer",
+    "product": "Product",
+    "amount": "Amount",
+    "status": "Status",
+    "date": "Date",
+    "delivered": "Delivered",
+    "shipped": "Shipped",
+    "processing": "Processing",
+    "cancelled": "Cancelled"
+  },
+
+  "team": {
+    "title": "Team Members",
+    "online": "Online",
+    "offline": "Offline",
+    "leadDeveloper": "Lead Developer",
+    "uiDesigner": "UI Designer",
+    "productManager": "Product Manager",
+    "qaEngineer": "QA Engineer"
+  },
+
+  "settings": {
+    "title": "Settings",
+    "mode": "Mode",
+    "light": "Light",
+    "dark": "Dark",
+    "primaryColor": "Primary Color",
+    "preview": "Preview",
+    "primaryButton": "Primary Button",
+    "customizationActive": "Customization Active",
+    "preferencesInfo": "Your preferences are automatically saved and will persist across sessions."
+  },
+
+  "months": {
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
+    "jul": "Jul",
+    "aug": "Aug",
+    "sep": "Sep",
+    "oct": "Oct",
+    "nov": "Nov",
+    "dec": "Dec"
+  }
+}
