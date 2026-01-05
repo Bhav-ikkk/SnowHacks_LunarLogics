@@ -1,136 +1,260 @@
 'use client';
 
-import { Box, Container, Typography, Card, CardContent, Grid, Button, Chip } from '@mui/material';
-import { useTranslation } from 'react-i18next';
-import DashboardLayout from '@/components/DashboardLayout';
-import Link from 'next/link';
+import { 
+  Box, 
+  Container, 
+  Typography, 
+  Button, 
+  Card, 
+  CardContent,
+  Grid,
+  alpha,
+  useTheme
+} from '@mui/material';
+import { 
+  IconRocket, 
+  IconDatabase, 
+  IconShield, 
+  IconCode,
+  IconBolt,
+  IconTrendingUp 
+} from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+
+const MotionBox = motion(Box);
+const MotionCard = motion(Card);
 
 export default function Home() {
-  const { t } = useTranslation('common');
+  const theme = useTheme();
+  const router = useRouter();
 
   const features = [
     {
-      title: '3-Layer Architecture',
-      description: 'Clean separation: Pages → Views → API → Services',
-      icon: '🏗️'
+      title: 'Fast Development',
+      description: 'Built with Next.js and Material-UI for rapid prototyping',
+      icon: <IconBolt size={40} />,
+      color: theme.palette.warning.main
+    },
+    {
+      title: 'Secure by Default',
+      description: 'Role-based access control and authentication ready',
+      icon: <IconShield size={40} />,
+      color: theme.palette.success.main
     },
     {
       title: 'Database Ready',
-      description: 'pg-promise with PostgreSQL integration',
-      icon: '🗄️'
+      description: 'PostgreSQL integration with Neon serverless database',
+      icon: <IconDatabase size={40} />,
+      color: theme.palette.info.main
     },
     {
-      title: 'UI Components',
-      description: 'Material-UI + Tabler Icons + Framer Motion',
-      icon: '🎨'
+      title: 'Modern Stack',
+      description: 'React, Next.js, Material-UI, and more cutting-edge tech',
+      icon: <IconCode size={40} />,
+      color: theme.palette.secondary.main
     },
     {
-      title: 'Internationalization',
-      description: 'i18next for multi-language support',
-      icon: '🌍'
+      title: 'Production Ready',
+      description: 'Scalable architecture with best practices built-in',
+      icon: <IconRocket size={40} />,
+      color: theme.palette.primary.main
     },
     {
-      title: 'Permissions',
-      description: 'CASL for role-based access control',
-      icon: '🔒'
-    },
-    {
-      title: 'HTTP Client',
-      description: 'Axios configured with interceptors',
-      icon: '📡'
+      title: 'Performance Optimized',
+      description: 'Fast loading times and smooth animations',
+      icon: <IconTrendingUp size={40} />,
+      color: theme.palette.error.main
     }
   ];
 
   return (
-    <DashboardLayout>
-      <Container maxWidth='xl'>
-        <Box sx={{ my: 4 }}>
-          {/* Hero Section */}
-          <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Typography variant='h2' component='h1' gutterBottom fontWeight={700}>
-              🏔️ {t('welcome')}
-            </Typography>
-            <Typography variant='h5' color='text.secondary' sx={{ mb: 3 }}>
-              Production-Ready Next.js Hackathon Template
-            </Typography>
-            <Chip label="3-Layer Architecture" color="primary" sx={{ mr: 1 }} />
-            <Chip label="Page Router" color="secondary" sx={{ mr: 1 }} />
-            <Chip label="JavaScript" color="success" />
+    <Box 
+      sx={{ 
+        minHeight: '100vh',
+        background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.05)} 0%, ${alpha(theme.palette.secondary.main, 0.05)} 100%)`,
+        py: 8
+      }}
+    >
+      <Container maxWidth="lg">
+        {/* Hero Section */}
+        <MotionBox
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          sx={{ textAlign: 'center', mb: 8 }}
+        >
+          <Typography 
+            variant="h1" 
+            sx={{ 
+              fontWeight: 800, 
+              mb: 2,
+              fontSize: { xs: '2.5rem', md: '3.5rem' },
+              background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text'
+            }}
+          >
+            Welcome to SnowHacks
+          </Typography>
+          <Typography 
+            variant="h5" 
+            sx={{ 
+              mb: 4, 
+              color: 'text.secondary',
+              fontWeight: 400,
+              maxWidth: 600,
+              mx: 'auto'
+            }}
+          >
+            Build your next big idea with our modern, scalable, and production-ready template
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Button 
+              variant="contained" 
+              size="large"
+              onClick={() => router.push('/dashboard')}
+              sx={{ 
+                px: 4, 
+                py: 1.5,
+                borderRadius: 2,
+                textTransform: 'none',
+                fontWeight: 600,
+                fontSize: '1.1rem'
+              }}
+            >
+              Get Started
+            </Button>
+            <Button 
+              variant="outlined" 
+              size="large"
+              onClick={() => router.push('/signup')}
+              sx={{ 
+                px: 4, 
+                py: 1.5,
+                borderRadius: 2,
+                textTransform: 'none',
+                fontWeight: 600,
+                fontSize: '1.1rem'
+              }}
+            >
+              Sign Up Free
+            </Button>
           </Box>
+        </MotionBox>
 
-          {/* Features Grid */}
-          <Grid container spacing={3} sx={{ mb: 4 }}>
-            {features.map((feature, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card sx={{ height: '100%' }}>
-                  <CardContent>
-                    <Typography variant='h3' sx={{ mb: 2 }}>
-                      {feature.icon}
-                    </Typography>
-                    <Typography variant='h6' gutterBottom fontWeight={600}>
-                      {feature.title}
-                    </Typography>
-                    <Typography variant='body2' color='text.secondary'>
-                      {feature.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+        {/* Features Section */}
+        <Grid container spacing={3}>
+          {features.map((feature, index) => (
+            <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
+              <MotionCard
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -8, transition: { duration: 0.2 } }}
+                sx={{ 
+                  height: '100%',
+                  borderRadius: 3,
+                  border: `1px solid ${theme.palette.divider}`,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    boxShadow: theme.shadows[8],
+                    borderColor: feature.color
+                  }
+                }}
+              >
+                <CardContent sx={{ p: 3 }}>
+                  <Box 
+                    sx={{ 
+                      width: 60, 
+                      height: 60, 
+                      borderRadius: 2,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      mb: 2,
+                      bgcolor: alpha(feature.color, 0.1),
+                      color: feature.color
+                    }}
+                  >
+                    {feature.icon}
+                  </Box>
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      fontWeight: 700, 
+                      mb: 1,
+                      color: 'text.primary'
+                    }}
+                  >
+                    {feature.title}
+                  </Typography>
+                  <Typography 
+                    variant="body2" 
+                    sx={{ color: 'text.secondary', lineHeight: 1.7 }}
+                  >
+                    {feature.description}
+                  </Typography>
+                </CardContent>
+              </MotionCard>
+            </Grid>
+          ))}
+        </Grid>
 
-          {/* Documentation Links */}
-          <Card>
-            <CardContent>
-              <Typography variant='h5' gutterBottom fontWeight={600}>
-                📚 Documentation
-              </Typography>
-              <Typography variant='body1' color='text.secondary' sx={{ mb: 3 }}>
-                Everything you need to start building your hackathon project
-              </Typography>
-              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                <Button 
-                  variant='contained' 
-                  size='large'
-                  onClick={() => window.open('/ARCHITECTURE.md', '_blank')}
-                >
-                  Architecture Guide
-                </Button>
-                <Button 
-                  variant='outlined' 
-                  size='large'
-                  onClick={() => window.open('/FLOW_EXAMPLE.md', '_blank')}
-                >
-                  Flow Example
-                </Button>
-                <Button 
-                  variant='outlined' 
-                  size='large'
-                  onClick={() => window.open('/QUICKSTART.md', '_blank')}
-                >
-                  Quick Reference
-                </Button>
-                <Link href='/example' passHref>
-                  <Button variant='contained' color='success' size='large'>
-                    View Live Example
-                  </Button>
-                </Link>
-              </Box>
-            </CardContent>
-          </Card>
-
-          {/* Quick Start */}
-          <Box sx={{ mt: 4, textAlign: 'center' }}>
-            <Typography variant='h6' gutterBottom>
-              🚀 Ready to build?
-            </Typography>
-            <Typography variant='body1' color='text.secondary'>
-              Check out the example at <code>/example</code> to see everything in action
-            </Typography>
-          </Box>
-        </Box>
+        {/* CTA Section */}
+        <MotionBox
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 0.8 }}
+          sx={{ 
+            mt: 8, 
+            textAlign: 'center',
+            p: 6,
+            borderRadius: 3,
+            background: `linear-gradient(135deg, ${alpha(theme.palette.primary.main, 0.1)} 0%, ${alpha(theme.palette.secondary.main, 0.1)} 100%)`,
+            border: `1px solid ${theme.palette.divider}`
+          }}
+        >
+          <Typography 
+            variant="h4" 
+            sx={{ 
+              fontWeight: 700, 
+              mb: 2,
+              color: 'text.primary'
+            }}
+          >
+            Ready to Start Building?
+          </Typography>
+          <Typography 
+            variant="body1" 
+            sx={{ 
+              mb: 3, 
+              color: 'text.secondary',
+              maxWidth: 500,
+              mx: 'auto'
+            }}
+          >
+            Join thousands of developers building amazing applications with our template
+          </Typography>
+          <Button 
+            variant="contained" 
+            size="large"
+            onClick={() => router.push('/dashboard')}
+            sx={{ 
+              px: 5, 
+              py: 1.5,
+              borderRadius: 2,
+              textTransform: 'none',
+              fontWeight: 600,
+              fontSize: '1.1rem'
+            }}
+          >
+            Explore Dashboard
+          </Button>
+        </MotionBox>
       </Container>
-    </DashboardLayout>
+    </Box>
   );
 }
 
