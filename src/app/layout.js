@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/theme/ThemeContext';
 import AppShell from '@/components/AppShell';
 import SettingsDrawer from '@/components/SettingsDrawer';
 import NProgressBar from '@/components/NProgressBar';
+import AuthProvider from '@/components/AuthProvider';
 
 export default function RootLayout({ children }) {
   const { i18n } = useTranslation();
@@ -30,15 +31,17 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body style={{ margin: 0 }}>
-        <ThemeProvider>
-          <NProgressBar />
-          {isAuthPage ? (
-            children
-          ) : (
-            <AppShell>{children}</AppShell>
-          )}
-          <SettingsDrawer />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <NProgressBar />
+            {isAuthPage ? (
+              children
+            ) : (
+              <AppShell>{children}</AppShell>
+            )}
+            <SettingsDrawer />
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

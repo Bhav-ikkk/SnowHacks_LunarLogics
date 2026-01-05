@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { 
   Box, 
   Card, 
@@ -12,20 +13,81 @@ import {
   alpha,
   useTheme,
   Checkbox,
-  FormControlLabel
+  FormControlLabel,
+  Alert,
+  CircularProgress
 } from '@mui/material';
 import { IconBrandGoogle, IconBrandGithub } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 export default function Signup() {
   const theme = useTheme();
   const router = useRouter();
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSignup = (e) => {
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSignup = async (e) => {
     e.preventDefault();
-    // TODO: Implement signup logic
-    router.push('/dashboard');
+    setError('');
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || 'Registration failed');
+        return;
+      }
+
+      // Auto sign in after registration
+      const result = await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: false
+      });
+
+      if (result?.error) {
+        router.push('/login');
+      } else {
+        router.push('/dashboard');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignup = () => {
+    signIn('google', { callbackUrl: '/dashboard' });
   };
 
   return (
@@ -70,11 +132,18 @@ export default function Signup() {
             Sign up to get started
           </Typography>
 
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
           <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
             <Button
               fullWidth
               variant="outlined"
               startIcon={<IconBrandGoogle size={20} />}
+              onClick={handleGoogleSignup}
               sx={{ py: 1.5, textTransform: 'none' }}
             >
               Google
@@ -84,6 +153,7 @@ export default function Signup() {
               variant="outlined"
               startIcon={<IconBrandGithub size={20} />}
               sx={{ py: 1.5, textTransform: 'none' }}
+              disabled
             >
               GitHub
             </Button>
@@ -99,29 +169,41 @@ export default function Signup() {
             <TextField
               fullWidth
               label="Full Name"
+              name="name"
               type="text"
               required
+              value={formData.name}
+              onChange={handleChange}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               label="Email"
+              name="email"
               type="email"
               required
+              value={formData.email}
+              onChange={handleChange}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               label="Password"
+              name="password"
               type="password"
               required
+              value={formData.password}
+              onChange={handleChange}
               sx={{ mb: 2 }}
             />
             <TextField
               fullWidth
               label="Confirm Password"
+              name="confirmPassword"
               type="password"
               required
+              value={formData.confirmPassword}
+              onChange={handleChange}
               sx={{ mb: 2 }}
             />
 
@@ -161,9 +243,10 @@ export default function Signup() {
               type="submit"
               variant="contained"
               size="large"
+              disabled={loading}
               sx={{ py: 1.5, mb: 2, fontWeight: 600 }}
             >
-              Sign Up
+              {loading ? <CircularProgress size={24} /> : 'Sign Up'}
             </Button>
 
             <Typography

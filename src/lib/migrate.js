@@ -11,14 +11,35 @@ config({ path: join(__dirname, '../../.env') });
 
 const migrations = [
   {
-    name: 'Create users table',
+    name: 'Add OAuth columns to users (if not exist)',
+    sql: `
+      DO $$ 
+      BEGIN 
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='provider') THEN
+          ALTER TABLE users ADD COLUMN provider VARCHAR(50);
+        END IF;
+        IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='provider_id') THEN
+          ALTER TABLE users ADD COLUMN provider_id VARCHAR(255);
+        END IF;
+        IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='users' AND column_name='password' AND is_nullable='NO') THEN
+          ALTER TABLE users ALTER COLUMN password DROP NOT NULL;
+        END IF;
+      END $$;
+      
+      CREATE INDEX IF NOT EXISTS idx_users_provider ON users(provider);
+    `
+  },
+  {
+    name: 'Create users table (for new installations)',
     sql: `
       CREATE TABLE IF NOT EXISTS users (
         id SERIAL PRIMARY KEY,
         name VARCHAR(255) NOT NULL,
         email VARCHAR(255) UNIQUE NOT NULL,
-        password VARCHAR(255) NOT NULL,
+        password VARCHAR(255),
         role VARCHAR(50) DEFAULT 'user',
+        provider VARCHAR(50),
+        provider_id VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );

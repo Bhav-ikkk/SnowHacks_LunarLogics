@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { 
   Box, 
   Card, 
@@ -10,20 +11,49 @@ import {
   Link as MuiLink,
   Divider,
   alpha,
-  useTheme
+  useTheme,
+  Alert,
+  CircularProgress
 } from '@mui/material';
 import { IconBrandGoogle, IconBrandGithub } from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 
 export default function Login() {
   const theme = useTheme();
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    // TODO: Implement login logic
-    router.push('/dashboard');
+    setError('');
+    setLoading(true);
+
+    try {
+      const result = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        router.push('/dashboard');
+      }
+    } catch (err) {
+      setError('An error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = () => {
+    signIn('google', { callbackUrl: '/dashboard' });
   };
 
   return (
@@ -41,7 +71,7 @@ export default function Login() {
         sx={{
           width: '100%',
           maxWidth: 450,
-          borderRadius: 3,
+          borderRadius: 1,
           boxShadow: theme.shadows[4]
         }}
       >
@@ -68,11 +98,18 @@ export default function Login() {
             Sign in to your account to continue
           </Typography>
 
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
           <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
             <Button
               fullWidth
               variant="outlined"
               startIcon={<IconBrandGoogle size={20} />}
+              onClick={handleGoogleLogin}
               sx={{ py: 1.5, textTransform: 'none' }}
             >
               Google
@@ -82,6 +119,7 @@ export default function Login() {
               variant="outlined"
               startIcon={<IconBrandGithub size={20} />}
               sx={{ py: 1.5, textTransform: 'none' }}
+              disabled
             >
               GitHub
             </Button>
@@ -99,6 +137,8 @@ export default function Login() {
               label="Email"
               type="email"
               required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               sx={{ mb: 2 }}
             />
             <TextField
@@ -106,6 +146,8 @@ export default function Login() {
               label="Password"
               type="password"
               required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               sx={{ mb: 1 }}
             />
 
@@ -129,9 +171,10 @@ export default function Login() {
               type="submit"
               variant="contained"
               size="large"
+              disabled={loading}
               sx={{ py: 1.5, mb: 2, fontWeight: 600 }}
             >
-              Sign In
+              {loading ? <CircularProgress size={24} /> : 'Sign In'}
             </Button>
 
             <Typography

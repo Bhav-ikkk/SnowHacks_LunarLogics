@@ -1,5 +1,5 @@
 "use client";
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import AppBar from './AppBar';
 import { Box, useTheme, useMediaQuery } from '@mui/material';
@@ -16,8 +16,18 @@ export const useSidebar = () => useContext(SidebarContext);
 export default function AppShell({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'), { noSsr: true });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch by rendering a consistent initial state
+  if (!mounted) {
+    return null;
+  }
 
   return (
     <SidebarContext.Provider value={{ 
